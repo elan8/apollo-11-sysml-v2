@@ -22,6 +22,7 @@ package TechnicalComponentsPackage {
 	abstract part def FuelledComponent :> HardwareComponent {
 		attribute propellantMass :> ISQ::mass;
 		attribute dryMass :> ISQ::mass;
+		attribute :>> mass = dryMass + propellantMass;
 	}
 
 	abstract part def RocketEngine :> HardwareComponent {
@@ -84,7 +85,7 @@ package TechnicalComponentsPackage {
 		port launchVehicleInterfacePort : ~StagingPort;
 	}
 
-	part def ApolloCommandServiceModule :> CompositeThing, PowerConsumer, PowerProvider {
+	part def ApolloCommandServiceModule :> HardwareComponent, PowerConsumer, PowerProvider {
 		doc /* The combined Command and Service Module (CSM), which functions as the primary spacecraft for lunar transit and Earth return. */
 		part commandModule : ApolloCommandModule;
 		part serviceModule : ApolloServiceModule;
@@ -95,7 +96,7 @@ package TechnicalComponentsPackage {
 		interface cmSMUmbilical : CSMInterface connect serviceModule.umbilicalPort to commandModule.umbilicalPort;
 	}
 
-	part def ApolloLunarModule :> CompositeThing, PowerConsumer, PowerProvider {
+	part def ApolloLunarModule :> HardwareComponent, PowerConsumer, PowerProvider {
 		doc /* The two-stage vehicle that performed the lunar landing and ascent. */
 		
 		part lunarModuleDescentStage : LunarModuleDescentStage;

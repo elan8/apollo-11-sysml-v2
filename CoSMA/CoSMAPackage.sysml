@@ -17,19 +17,11 @@ library package CoSMAPackage {
 	private import Metaobjects::*;
 	private import CoSMAQuantitiesAndUnitsPackage::*;
 	
-	part def MassedThing {
-		attribute mass :> ISQ::mass; 
-		attribute totalMass :> ISQ::mass;
-	}
-	
-	part def SimpleThing :> MassedThing {
-		attribute redefines totalMass = mass;
-	}
-	
-	part def CompositeThing :> MassedThing {
-		part subcomponents: MassedThing[*];
-		:>> totalMass = mass + sum(subcomponents.totalMass); 
-	}
+    part def MassedComponent {
+        part subcomponents : MassedComponent [*] default null;
+        attribute mass :> ISQ::mass;
+        attribute totalMass :> ISQ::mass = mass + sum(subcomponents.totalMass);
+    }
 
 	abstract action def Operation;
 	
@@ -45,7 +37,7 @@ library package CoSMAPackage {
 	}
 
 	abstract part def SoftwareComponent :> TechnicalComponent;
-	abstract part def HardwareComponent :> TechnicalComponent, SimpleThing;
+	abstract part def HardwareComponent :> TechnicalComponent, MassedComponent;
 
 	abstract part def PowerProvider :> HardwareComponent {
 		attribute powerGenerated :> ISQ::power default 0 [W];	
@@ -119,7 +111,7 @@ library package CoSMAPackage {
 		part externalSystems[*] : System;
 	}
 	
-	part def System :> CompositeThing {
+	part def System :> MassedComponent {
 		
 	}
 	
