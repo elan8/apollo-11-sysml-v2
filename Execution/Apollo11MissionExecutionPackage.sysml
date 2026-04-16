@@ -80,7 +80,6 @@ package Apollo11MissionExecutionPackage {
 				doc /* State Activation: LaunchPhase begins with liftoff. */
 				attribute missionTime :> ISQ::time = 0 [s];
 				snapshot missionSystemAtT0 :> apollo11MissionSystem {
-					attribute :>> totalMass = 2970000 [kg];
 					attribute velocity :> ISQ::speed = 0 [SI::'m⋅s⁻¹'];
 					part :>> launchVehicle {
 						part :>> stage1 {
@@ -103,7 +102,6 @@ package Apollo11MissionExecutionPackage {
 				doc /* Separation Event: The S-IC first stage separates. */
 				attribute missionTime :> ISQ::time = 168 [s];
 				snapshot missionSystemAtS1Sep :> apollo11MissionSystem {
-					attribute  totalMass = 678000 [kg];
 					attribute velocity :> ISQ::speed = 2400 [m/s];
 					attribute altitude :> ISQ::length = 67 ['km'];
 					part :>> launchVehicle {
@@ -115,7 +113,6 @@ package Apollo11MissionExecutionPackage {
 				doc /* Separation Event: The S-II second stage separates. */
 				attribute missionTime :> ISQ::time = 540 [s];
 				snapshot missionSystemAtS2Sep :> apollo11MissionSystem {
-					attribute :>> totalMass = 187000 [kg];
 					attribute velocity :> ISQ::speed = 6800 [m/s];
 					attribute altitude :> ISQ::length = 185 ['km'];
 					part :>> launchVehicle {
