@@ -1,4 +1,4 @@
-# Submits the repository snapshot to Spec42 Server on each PR and on pushes to main.
+# Submits the repository snapshot to Spec42 Server on each PR, on pushes to main, or when run manually (Actions → Spec42 → Run workflow).
 #
 # Required repository secrets:
 #   SPEC42_SERVER_URL    — Spec42 Server base URL (e.g. https://spec42.example.com)
@@ -12,7 +12,7 @@ name: Spec42
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -36,7 +36,7 @@ jobs:
           poll_seconds: 5
           timeout_seconds: 1800
           wait_for_completion: true
-          update_github_status: true
+          update_github_status: false
           github_token: ${{ github.token }}
           github_status_context: spec42/server
           generate_pr_summary: ${{ github.event_name == 'pull_request' }}
