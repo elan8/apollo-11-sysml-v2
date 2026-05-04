@@ -37,7 +37,7 @@ jobs:
           poll_seconds: 5
           timeout_seconds: 1800
           wait_for_completion: true
-          update_github_status: true
+          update_github_status: false
           github_token: ${{ github.token }}
           github_status_context: spec42/server
           generate_pr_summary: ${{ github.event_name == 'pull_request' }}
