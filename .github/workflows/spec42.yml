@@ -1,0 +1,50 @@
+# Submits the repository snapshot to Spec42 Server on each PR and on pushes to main.
+#
+# Required repository secrets:
+#   SPEC42_SERVER_URL    — Spec42 Server base URL (e.g. https://spec42.example.com)
+#   SPEC42_PROJECT_TOKEN — Bearer token for the Spec42 project
+#
+# Optional:
+#   SPEC42_PUBLIC_BASE_URL — Public URL for links in PR summaries (defaults to server URL)
+
+name: Spec42
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  statuses: write
+  pull-requests: write
+
+jobs:
+  spec42:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Submit to Spec42
+        id: spec42
+        uses: elan8/spec42-server-action@v1
+        with:
+          server_url: ${{ secrets.SPEC42_SERVER_URL }}
+          project_token: ${{ secrets.SPEC42_PROJECT_TOKEN }}
+          analysis_root: .
+          poll_seconds: 5
+          timeout_seconds: 1800
+          wait_for_completion: true
+          update_github_status: true
+          github_token: ${{ github.token }}
+          github_status_context: spec42/server
+          generate_pr_summary: ${{ github.event_name == 'pull_request' }}
+          post_pr_comment: ${{ github.event_name == 'pull_request' }}
+          public_base_url: ${{ secrets.SPEC42_PUBLIC_BASE_URL }}
+
+      - name: Spec42 run summary
+        if: always()
+        run: |
+          echo "Run id: ${{ steps.spec42.outputs.run_id }}"
+          echo "Run status: ${{ steps.spec42.outputs.run_status }}"
+          echo "Run URL: ${{ steps.spec42.outputs.run_api_url }}"
